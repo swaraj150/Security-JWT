@@ -36,6 +36,7 @@ public class AuthenticationService {
         var jwtToken=jwtService.generateToken(user);
         return AuthenticationResponse.builder()
         .token(jwtToken)
+        .msg("Registration Succesful")
         .build();
     }
     public AuthenticationResponse authenticate(AuthenticationRequest request){
@@ -45,14 +46,16 @@ public class AuthenticationService {
             authenticationManager.authenticate(authenticationToken);
             
         } catch (BadCredentialsException b) {
-            System.out.println("hi");
-            throw new BadCredentialsException("Incorrect username or password", b);
+            System.out.println("hello");
+            return AuthenticationResponse.builder().msg("Invalid Credentials").build();
+            // throw new BadCredentialsException("Incorrect username or password", b);
         }
         var user=userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken=jwtService.generateToken(user);
         return AuthenticationResponse.builder()
             .token(jwtToken)
+            .msg("Login Successful")
             .build();
     }
 }
